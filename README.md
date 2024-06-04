@@ -46,8 +46,19 @@ Bem-vindo ao Sistema de Gestão de Empréstimos de Ferramentas! Este software aj
 - **Usuário:** root
 - **Senha:** 252426cd
 
+### 🎁 Componentes
+
+- Victor Matheus Seifert/1072416651 (Mathzss)
+- Lucas da Costa/1072412728 (LucasdaCosta04)
+- Bryan Soares Francisco/10724112251 (BryanSFrancisco)
+- Rafael Januario/1072411490 (januariorafa)
+  
 ## 🚀 Instalação
 
  Clone o repositório:
    ```bash
    git clone https://github.com/LucasdaCosta04/Projeto-1S-PSC.git
+
+
+
+
