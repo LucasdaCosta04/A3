@@ -1,132 +1,137 @@
 package dao;
 
-import modelo.Amigos;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import modelo.Amigo;
+import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.Statement;
 
 public class AmigoDAO {
-
-    public static ArrayList<Amigos> MinhaLista = new ArrayList<>();
+    private final BDConnection connectionBD;
+    private static final Logger LOGGER = Logger.getLogger(AmigoDAO.class.getName());
 
     public AmigoDAO() {
+        this.connectionBD = new BDConnection();
+
     }
 
-    //esse metodo serve para pegar o maior e ultimo id cadastrado no banco
-    public int pegaMaiorID() throws SQLException {
+    public int pegaMaiorID() {
         int maior = 0;
-        try {
-            Connection conexaoBD = Connection.getConexaoBD();
-            if (conexaoBD != null) {
-                try (Statement stmt = conexaoBD.createStatement()) {
-                    ResultSet res = stmt.executeQuery("SELECT MAX(id_amigo) id_amigo FROM amigos");
-                    res.next();
-                    maior = res.getInt("id_amigo");
-                }
+        String sql = "SELECT MAX(id_amigo) as id_amigo FROM amigos";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             Statement stmt = conexaoBD.createStatement();
+             ResultSet res = stmt.executeQuery(sql)) {
+            if (res.next()) {
+                maior = res.getInt("id_amigo");
             }
         } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "Erro ao pegar maior ID", ex);
         }
         return maior;
     }
 
-    public ArrayList getMinhaLista() {
-        MinhaLista.clear();
-        //imporatnte limpar a lista antes de dar um get pq caso tenhamos dado um 
-        //insert/update novo no banco atualizamos ela certinho
-        try {
-            Connection conexaoBD = Connection.getConexaoBD();
-            if (conexaoBD != null) {
-                Statement conecaox = conexaoBD.createStatement();
-                ResultSet resposta = conecaox.executeQuery("SELECT * FROM amigos");
-                while (resposta.next()) {
-                    int id = resposta.getInt("id_amigo");
-                    String nome = resposta.getString("nome");
-                    String telefone = resposta.getString("telefone");
+    public ArrayList<Amigo> getMinhaLista() {
+        ArrayList<Amigo> lista = new ArrayList<>();
+        String sql = "SELECT * FROM amigo";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             Statement stmt = conexaoBD.createStatement();
+             ResultSet resposta = stmt.executeQuery(sql)) {
+            while (resposta.next()) {
+                int id = resposta.getInt("id_amigo");
+                String nome = resposta.getString("nome");
+                String telefone = resposta.getString("telefone");
 
-                    Amigos objeto = new Amigos(id, nome, telefone);
-                    MinhaLista.add(objeto);
-                }
-                conecaox.close();
+                Amigo objeto = new Amigo(id, nome, telefone);
+                lista.add(objeto);
             }
-
         } catch (SQLException ex) {
-            //caso de erro
+            LOGGER.log(Level.SEVERE, "Erro ao obter lista de amigos", ex);
         }
-        return MinhaLista;
+        return lista;
     }
 
-    public boolean inserirAmigoBD(Amigos objeto) {
-        String sql = "INSERT INTO amigos(nome, telefone) VALUES(?, ?)";
-        try {
-            Connection conexaoBD = Connection.getConexaoBD();
-            if (conexaoBD != null) {
-                try (PreparedStatement stmt = conexaoBD.prepareStatement(sql)) {
-                    stmt.setString(1, objeto.getNome());
-                    stmt.setString(2, objeto.getTelefone());
-                    stmt.execute();
-                }
-                return true;
-            }
+    public boolean inserirAmigoBD(Amigo objeto) {
+        String sql = "INSERT INTO amigo(nome, telefone) VALUES(?, ?)";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             PreparedStatement stmt = conexaoBD.prepareStatement(sql)) {
+            stmt.setString(1, objeto.getNome());
+            stmt.setString(2, objeto.getTelefone());
+            stmt.executeUpdate();
+            return true;
         } catch (SQLException erro) {
-            throw new RuntimeException(erro);
+            LOGGER.log(Level.SEVERE, "Erro ao inserir amigo", erro);
         }
         return false;
     }
 
     public boolean deletaAmigoBD(int id) {
-        try {
-            Connection conexaoBD = Connection.getConexaoBD();
-            if (conexaoBD != null) {
-                try (Statement stmt = conexaoBD.createStatement()) {
-                    stmt.executeUpdate("DELETE FROM amigos WHERE id_amigo = " + id);
-                    stmt.close();
-                }
-            }
+        String sql = "DELETE FROM amigo WHERE id_amigo = ?";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             PreparedStatement stmt = conexaoBD.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
         } catch (SQLException erro) {
-        }
-        return true;
-    }
-
-    public boolean atualizarAmigo(Amigos objeto) {
-        String sintaxe = "UPDATE amigos SET nome = ?, telefone = ? WHERE id_amigo = ?";
-        try {
-            Connection conexaoBD = Connection.getConexaoBD();
-            if (conexaoBD != null) {
-                try (PreparedStatement stmt = conexaoBD.prepareStatement(sintaxe)) {
-                    stmt.setString(1, objeto.getNome());
-                    stmt.setString(2, objeto.getTelefone());
-                    stmt.setInt(3, objeto.getId());
-                    int linhasAfetadas = stmt.executeUpdate();
-                    return linhasAfetadas > 0;
-                }
-            }
-        } catch (SQLException erro) {
-            throw new RuntimeException(erro);
+            LOGGER.log(Level.SEVERE, "Erro ao deletar amigo", erro);
         }
         return false;
     }
 
-    public Amigos carregaAmigo(int id) {
-        Amigos objeto = new Amigos(); //cria o objeto
-        objeto.setId(id); //seta o id recebido por parametro para o objeto
-        try {
-            Connection conexaoBD = Connection.getConexaoBD();
-            if (conexaoBD != null) {
-                try (Statement stmt = conexaoBD.createStatement()) {
-                    //executa nossa query
-                    ResultSet resposta = stmt.executeQuery("SELECT * FROM amigos WHERE id_amigo = " + id);
-                    resposta.next();
-                    objeto.setNome(resposta.getString("nome"));
-                    objeto.setTelefone(resposta.getString("telefone"));
+    public boolean atualizarAmigoBD(Amigo objeto) {
+        String sql = "UPDATE amigo SET nome = ?, telefone = ? WHERE id_amigo = ?";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             PreparedStatement stmt = conexaoBD.prepareStatement(sql)) {
+            stmt.setString(1, objeto.getNome());
+            stmt.setString(2, objeto.getTelefone());
+            stmt.setInt(3, objeto.getId());
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+        } catch (SQLException erro) {
+            LOGGER.log(Level.SEVERE, "Erro ao atualizar amigo", erro);
+        }
+        return false;
+    }
+
+    public Amigo carregaAmigoBD(int id) {
+        String sql = "SELECT * FROM amigo WHERE id_amigo = ?";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             PreparedStatement stmt = conexaoBD.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet resposta = stmt.executeQuery()) {
+                if (resposta.next()) {
+                    int amigoId = resposta.getInt("id_amigo");
+                    String nome = resposta.getString("nome");
+                    String telefone = resposta.getString("telefone");
+                    return new Amigo(amigoId, nome, telefone);
                 }
             }
         } catch (SQLException erro) {
-              throw new RuntimeException(erro);
+            LOGGER.log(Level.SEVERE, "Erro ao carregar amigo", erro);
         }
-        return objeto;
+        return null;
+    }
+    
+    public Amigo buscarAmigoPorId(int id) {
+        String sql = "SELECT * FROM amigo WHERE id_amigo = ?";
+        try (Connection conexaoBD = BDConnection.getConnection();
+             PreparedStatement stmt = conexaoBD.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet resposta = stmt.executeQuery()) {
+                if (resposta.next()) {
+                    int amigoId = resposta.getInt("id_amigo");
+                    String nome = resposta.getString("nome");
+                    String telefone = resposta.getString("telefone");
+                    return new Amigo(amigoId, nome, telefone);
+                }
+            }
+        } catch (SQLException erro) {
+            LOGGER.log(Level.SEVERE, "Erro ao buscar amigo por ID", erro);
+        }
+        return null;
     }
 }
+//esta faltando a documentacao
