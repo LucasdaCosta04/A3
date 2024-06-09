@@ -4,7 +4,7 @@ import dao.AmigoDAO;
 import java.util.ArrayList;
 import java.sql.SQLException;
 
-public class Amigos {
+public class Amigo {
 // Atributos
 
     private int id;
@@ -12,12 +12,12 @@ public class Amigos {
     private String telefone;
 
 //Construtor de Objeto Vazio
-    public Amigos() {
+    public Amigo() {
         this(0, "", "");
     }
 
 // Construtor de Objeto, com parâmetros
-    public Amigos(int id, String nome, String telefone) {
+    public Amigo(int id, String nome, String telefone) {
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;
@@ -56,23 +56,23 @@ public class Amigos {
 
     /* Abaixo os métodos para uso junto com o DAO simulando a estrutura em camadas 
     para usar com bancos de dados.*/
-    //Retorna a Lista de Amigos(obejtos)
+    //Retorna a Lista de Amigo(obejtos)
 
-    public ArrayList<Amigos> getMinhaLista() {
+    public ArrayList<Amigo> getMinhaLista() {
         return AmigoDAO.getMinhaLista();
     }
-//Cadastra novo Amigos
+//Cadastra novo Amigo
 
     public boolean inserirAmigoDB(String nome, String telefone) throws SQLException {
         int id = this.maiorID() + 1;
-        Amigos objeto = new Amigos(id, nome, telefone);
+        Amigo objeto = new Amigo(id, nome, telefone);
         getMinhaLista().add(objeto);
         return true;
     }
-//Edita um Amigos específico pelo seu campo ID
+//Edita um Amigo específico pelo seu campo ID
 
     public boolean updateAmigoDB(String nome, int id, String telefone) {
-        Amigos objeto = new Amigos(id, nome, telefone);
+        Amigo objeto = new Amigo(id, nome, telefone);
         int indice = this.procuraIndice(id);
         getMinhaLista().set(indice, objeto);
         return true;
@@ -98,11 +98,11 @@ public class Amigos {
         return indice;
 
     }
-//Carrega dados de um Amigos específico pelo seu Id
+//Carrega dados de um Amigo específico pelo seu Id
 
-    public Amigos carregaAmigo(int id) {
+    public Amigo carregaAmigo(int id) {
         int indice = this.procuraIndice(id);
-        return (Amigos) getMinhaLista().get(indice);
+        return (Amigo) getMinhaLista().get(indice);
     }
 
     //Retorna o maior Id da nossa base de dados
