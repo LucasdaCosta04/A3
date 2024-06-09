@@ -24,7 +24,8 @@ CREATE TABLE Emprestimo (
     data_emprestimo DATE NOT NULL,
     data_devolucao DATE,
     FOREIGN KEY (nome_amigo) REFERENCES Amigo(nome),
-    FOREIGN KEY (nome_ferramenta) REFERENCES Ferramenta(nome)
+    FOREIGN KEY (nome_ferramenta) REFERENCES Ferramenta(nome),
+    STATUS BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Ferramenta_Emprestimo (
@@ -33,12 +34,4 @@ CREATE TABLE Ferramenta_Emprestimo (
     PRIMARY KEY (id_ferramenta, id_emprestimo),
     FOREIGN KEY (id_ferramenta) REFERENCES Ferramenta(id_ferramenta),
     FOREIGN KEY (id_emprestimo) REFERENCES Emprestimo(id_emprestimo)
-);
-
-CREATE TABLE Evento (
-    id_evento INT AUTO_INCREMENT PRIMARY KEY,
-    id_amigo INT,
-    data_evento DATE NOT NULL,
-    descricao TEXT,
-    FOREIGN KEY (id_amigo) REFERENCES Amigo(id_amigo)
 );
