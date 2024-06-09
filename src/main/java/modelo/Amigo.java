@@ -5,25 +5,24 @@ import java.util.ArrayList;
 import java.sql.SQLException;
 
 public class Amigo {
-// Atributos
-
+    // Atributos
     private int id;
     private String nome;
     private String telefone;
 
-//Construtor de Objeto Vazio
+    // Construtor de Objeto Vazio
     public Amigo() {
         this(0, "", "");
     }
 
-// Construtor de Objeto, com parâmetros
+    // Construtor de Objeto, com parâmetros
     public Amigo(int id, String nome, String telefone) {
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;
     }
-// Métodos GET e SET
 
+    // Métodos GET e SET
     public int getId() {
         return id;
     }
@@ -56,58 +55,43 @@ public class Amigo {
 
     /* Abaixo os métodos para uso junto com o DAO simulando a estrutura em camadas 
     para usar com bancos de dados.*/
-    //Retorna a Lista de Amigo(obejtos)
-
+    //Retorna a Lista de Amigo(objetos)
     public ArrayList<Amigo> getMinhaLista() {
-        return AmigoDAO.getMinhaLista();
+        AmigoDAO amigoDAO = new AmigoDAO();
+        return amigoDAO.getMinhaLista();
     }
-//Cadastra novo Amigo
 
-    public boolean inserirAmigoDB(String nome, String telefone) throws SQLException {
+    //Cadastra novo Amigo
+    public boolean inserirAmigoBD(String nome, String telefone) throws SQLException {
+        AmigoDAO amigoDAO = new AmigoDAO();
         int id = this.maiorID() + 1;
         Amigo objeto = new Amigo(id, nome, telefone);
-        getMinhaLista().add(objeto);
-        return true;
+        return amigoDAO.inserirAmigoBD(objeto);
     }
-//Edita um Amigo específico pelo seu campo ID
 
-    public boolean updateAmigoDB(String nome, int id, String telefone) {
+    //Edita um Amigo específico pelo seu campo ID
+    public boolean updateAmigoBD(int id, String nome, String telefone) {
+        AmigoDAO amigoDAO = new AmigoDAO();
         Amigo objeto = new Amigo(id, nome, telefone);
-        int indice = this.procuraIndice(id);
-        getMinhaLista().set(indice, objeto);
-        return true;
+        return amigoDAO.atualizarAmigoBD(objeto);
     }
-//
 
-    public boolean deleteAmigoDB(int id) {
-        int indice = this.procuraIndice(id);
-        getMinhaLista().remove(indice);
-        return true;
+    //Deleta um Amigo específico pelo seu campo ID
+    public boolean deleteAmigoBD(int id) {
+        AmigoDAO amigoDAO = new AmigoDAO();
+        return amigoDAO.deletaAmigoBD(id);
     }
-//Procura o indice de objeto da MinhaLista que contem o ID enviado
 
-    private int procuraIndice(int id) {
-        int indice = -1;
-        for (int i = 0; i < getMinhaLista().size(); i++) {
-            if (getMinhaLista().get(i).getId() == id) {
-                indice = i;
-                break;
-            }
-        }
-
-        return indice;
-
-    }
-//Carrega dados de um Amigo específico pelo seu Id
-
-    public Amigo carregaAmigo(int id) {
-        int indice = this.procuraIndice(id);
-        return (Amigo) getMinhaLista().get(indice);
+    //Carrega dados de um Amigo específico pelo seu Id
+    public Amigo carregaAmigoBD(int id) {
+        AmigoDAO amigoDAO = new AmigoDAO();
+        return amigoDAO.carregaAmigoBD(id);
     }
 
     //Retorna o maior Id da nossa base de dados
     public int maiorID() {
-        return AmigoDAO.maiorID();
+        AmigoDAO amigoDAO = new AmigoDAO();
+        return amigoDAO.pegaMaiorID();
     }
-
 }
+// Falta documentacao
