@@ -94,4 +94,3 @@ public class Amigo {
         return amigoDAO.pegaMaiorID();
     }
 }
-// Falta documentacao
