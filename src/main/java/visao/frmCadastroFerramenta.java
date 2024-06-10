@@ -4,17 +4,27 @@
  */
 package visao;
 
+import javax.swing.JOptionPane;
+import modelo.Ferramenta;
+import dao.FerramentaDAO;
+
 /**
  *
  * @author User
  */
 public class frmCadastroFerramenta extends javax.swing.JFrame {
 
+    private Ferramenta objetoFerramenta;
+    private FerramentaDAO ferramentaDAO;
+
     /**
-     * Creates new form frmCadastroEmprestimo
+     * Creates new form frmGerenciaAmigos
      */
     public frmCadastroFerramenta() {
         initComponents();
+        this.objetoFerramenta = new Ferramenta();
+        this.ferramentaDAO = new FerramentaDAO();
+
     }
 
     /**
@@ -26,88 +36,146 @@ public class frmCadastroFerramenta extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        JBCancelar2 = new javax.swing.JButton();
+        JBCadastrar2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        JTFNome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        JTFNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         JTFMarca = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        JTFPreço = new javax.swing.JTextField();
-        JBCancelar2 = new javax.swing.JButton();
-        JBCadastrar2 = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        JTFCusto = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastrar Ferramentas");
-        setMinimumSize(new java.awt.Dimension(590, 365));
+        setMinimumSize(new java.awt.Dimension(594, 365));
         getContentPane().setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
-        jLabel1.setText("Cadastrar Ferramenta");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(167, 27, 248, 44);
-        getContentPane().add(JTFNome);
-        JTFNome.setBounds(60, 123, 205, 22);
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setLayout(null);
 
-        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jLabel2.setText("Nome:");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(6, 127, 50, 18);
+        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
+        jPanel1.setLayout(null);
 
-        jLabel3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jLabel3.setText("Marca:");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(291, 127, 50, 18);
-        getContentPane().add(JTFMarca);
-        JTFMarca.setBounds(345, 123, 205, 22);
-
-        jLabel4.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jLabel4.setText("Preço de Custo:");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(6, 208, 110, 18);
-        getContentPane().add(JTFPreço);
-        JTFPreço.setBounds(120, 210, 423, 22);
-
+        JBCancelar2.setBackground(new java.awt.Color(255, 153, 0));
         JBCancelar2.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        JBCancelar2.setForeground(new java.awt.Color(255, 0, 0));
-        JBCancelar2.setText("Cancelar");
+        JBCancelar2.setForeground(new java.awt.Color(255, 255, 255));
+        JBCancelar2.setText("Voltar");
         JBCancelar2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBCancelar2ActionPerformed(evt);
             }
         });
-        getContentPane().add(JBCancelar2);
-        JBCancelar2.setBounds(360, 280, 110, 40);
+        jPanel1.add(JBCancelar2);
+        JBCancelar2.setBounds(30, 260, 110, 40);
 
+        JBCadastrar2.setBackground(new java.awt.Color(51, 255, 0));
         JBCadastrar2.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        JBCadastrar2.setForeground(new java.awt.Color(51, 255, 51));
+        JBCadastrar2.setForeground(new java.awt.Color(255, 255, 255));
         JBCadastrar2.setText("Cadastrar");
         JBCadastrar2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBCadastrar2ActionPerformed(evt);
             }
         });
-        getContentPane().add(JBCadastrar2);
-        JBCadastrar2.setBounds(90, 280, 110, 40);
+        jPanel1.add(JBCadastrar2);
+        JBCadastrar2.setBounds(430, 260, 110, 40);
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Imagem Engrenagem.png"))); // NOI18N
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(-60, -40, 280, 250);
+        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 204, 0));
+        jLabel1.setText("Cadastrar Ferramenta");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(150, 20, 248, 44);
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Imagem Caixa.png"))); // NOI18N
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(420, 210, 170, 130);
+        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Nome:");
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(10, 110, 60, 21);
+        jPanel1.add(JTFNome);
+        JTFNome.setBounds(10, 140, 240, 22);
+
+        jLabel3.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Marca:");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(290, 110, 60, 20);
+        jPanel1.add(JTFMarca);
+        JTFMarca.setBounds(290, 140, 205, 22);
+
+        jLabel4.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Preço de Custo:");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(10, 190, 140, 21);
+        jPanel1.add(JTFCusto);
+        JTFCusto.setBounds(150, 190, 150, 22);
+
+        jPanel2.add(jPanel1);
+        jPanel1.setBounds(20, 20, 560, 310);
+
+        getContentPane().add(jPanel2);
+        jPanel2.setBounds(-10, -10, 590, 340);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelar2ActionPerformed
-             this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_JBCancelar2ActionPerformed
 
     private void JBCadastrar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrar2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            String nome = "";
+            String marca = "";
+            double custo = 0.0;
+
+            if (this.JTFNome.getText().length() < 2) {
+                throw new Mensagens("Nome deve conter ao menos 2 caracteres.");
+            } else {
+                nome = this.JTFNome.getText();
+            }
+            if (this.JTFMarca.getText().length() < 2) {
+                throw new Mensagens("Marca deve conter ao menos 2 caracteres.");
+            } else {
+                marca = this.JTFMarca.getText();
+            }
+            if (this.JTFCusto.getText().length() <= 0) {
+                throw new Mensagens("Custo deve ser um número positivo.");
+            } else {
+                custo = Double.parseDouble(this.JTFCusto.getText());
+            }
+
+            // envia os dados para o Controlador cadastrar
+            Ferramenta novaFerramenta = new Ferramenta();
+            novaFerramenta.setNome(nome);
+            novaFerramenta.setMarca(marca);
+            novaFerramenta.setCusto(custo);
+
+            FerramentaDAO ferramentaDAO = new FerramentaDAO();
+            boolean inserido = ferramentaDAO.inserirFerramentaBD(novaFerramenta);
+
+            if (inserido) {
+                JOptionPane.showMessageDialog(null, "Ferramenta Cadastrada com Sucesso!");
+                // limpa campos da interface
+                this.JTFNome.setText("");
+                this.JTFMarca.setText("");
+                this.JTFCusto.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar ferramenta.");
+            }
+
+            // Exibindo no console a ferramenta cadastrada
+            System.out.println(ferramentaDAO.getListaFerramenta().toString());
+        } catch (Mensagens erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } catch (NumberFormatException erro2) {
+            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        }
+
+// TODO add your handling code here:
     }//GEN-LAST:event_JBCadastrar2ActionPerformed
 
     /**
@@ -149,14 +217,14 @@ public class frmCadastroFerramenta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCadastrar2;
     private javax.swing.JButton JBCancelar2;
+    private javax.swing.JTextField JTFCusto;
     private javax.swing.JTextField JTFMarca;
     private javax.swing.JTextField JTFNome;
-    private javax.swing.JTextField JTFPreço;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }
